@@ -69,7 +69,7 @@ export default function Home() {
                 Let the music move you 
               </h2>
               <h2 className="flex font-semibold text-[1em] text-[#1a2b3b] my-10">
-                to join us the next Saturday at Dj Party
+                to join us the next Saturday in Dj Party
               </h2>
             </div>
 
