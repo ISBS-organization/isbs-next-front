@@ -5,6 +5,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import Webcam from "react-webcam";
 import Image from "next/image";
 import Inscription from "@/components/Inscription";
+import Summary from "@/components/Summary";
 
 const imagesParty = [
   "https://t4.ftcdn.net/jpg/01/20/28/25/360_F_120282530_gMCruc8XX2mwf5YtODLV2O1TGHzu4CAb.jpg",
@@ -58,6 +59,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function DemoPage() {
+  const [reservationDetails, setReservationDetails] = useState({})
   const [selected, setSelected] = useState(questions[0]);
   const [selectedInterviewer] = useState(
     interviewers[0]
@@ -94,6 +96,19 @@ export default function DemoPage() {
     };
   });
 
+  function handleReservation(_reservation: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: number;
+    nb_ticket: number;
+}) {
+    setReservationDetails(_reservation);
+    setStep(3)
+  }
+  function handleBack() {
+    setStep(1)
+  }
   return (
     <AnimatePresence>
                 <motion.p
@@ -167,14 +182,9 @@ export default function DemoPage() {
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.indigo.100),white)] opacity-20" />
       <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center" />
       <div className="mx-auto max-w-2xl lg:max-w-4xl">
+        <Summary reservationDetails={reservationDetails}/>
         <img className="mx-auto h-12" src="https://tailwindui.com/img/logos/workcation-logo-indigo-600.svg" alt="" />
         <figure className="mt-10">
-          <blockquote className="text-center text-xl font-semibold leading-8 text-gray-900 sm:text-2xl sm:leading-9">
-            <p>
-              “ We are  delighted to inform you that your reservation for the upcoming event, ` Basboussa 1.0 ` has been successfully processed.  please to check your email for payment details to complete the payment process and secure your ticket.
-              ”
-            </p>
-          </blockquote>
           <figcaption className="mt-10">  
             <div className="mt-4 flex items-center justify-center space-x-3 text-base">
               <div className="font-semibold text-gray-900">Ala</div>
@@ -392,7 +402,7 @@ export default function DemoPage() {
                   <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                     Please to complease your reservation information form here to get your place.
                   </p>
-                  <Inscription setStep={setStep}/>
+                  <Inscription handleReservation={handleReservation} handleBack={handleBack} />
                   <div>
                   {/* fom select */}
                   </div>
