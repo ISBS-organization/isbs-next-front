@@ -6,6 +6,7 @@ import Webcam from "react-webcam";
 import Image from "next/image";
 import Inscription from "@/components/Inscription";
 import Summary from "@/components/Summary";
+import Reservation from "@/components/Reservation/Reservation";
 
 const imagesParty = [
   "https://t4.ftcdn.net/jpg/01/20/28/25/360_F_120282530_gMCruc8XX2mwf5YtODLV2O1TGHzu4CAb.jpg",
@@ -27,7 +28,7 @@ const questions = [
   {
     id: 2,
     name: "check reservation",
-    description: "comming soon ",
+    description: "administration ",
     difficulty: "check",
   },
 ];
@@ -65,6 +66,9 @@ export default function DemoPage() {
     interviewers[0]
   );
   const [step, setStep] = useState(1);
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [token, setToken] = useState("")
+
   const webcamRef = useRef<Webcam | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const [capturing, setCapturing] = useState(false);
@@ -109,6 +113,11 @@ export default function DemoPage() {
   function handleBack() {
     setStep(1)
   }
+  function handleAdmin() {
+      setIsAdmin(!isAdmin)
+  }
+
+
   return (
     <AnimatePresence>
                 <motion.p
@@ -272,11 +281,11 @@ export default function DemoPage() {
                         Server size
                       </RadioGroup.Label>
                       <div className="space-y-4">
-                        {questions.map((question, index) => (
+                        {questions.map((question) => (
                           <RadioGroup.Option
                             key={question.name}
                             value={question}
-                            disabled={index ==1}
+                            onClick={handleAdmin}
                             className={({ checked, active }) =>
                               classNames(
                                 checked
@@ -294,6 +303,7 @@ export default function DemoPage() {
                                 <span className="flex items-center">
                                   <span className="flex flex-col text-sm">
                                     <RadioGroup.Label
+                                    onClick={handleAdmin}
                                       as="span"
                                       className="font-medium text-gray-900"
                                     >
@@ -396,16 +406,40 @@ export default function DemoPage() {
                   }}
                   className="max-w-lg mx-auto px-4 lg:px-0"
                 >
-                  <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                  <div>
+                    {isAdmin ?
+                     <>
+                    <h2 className="text-4xl font-bold text-[#1E2B3A]">
+                    Reservations information
+                    </h2>
+                    
+                    {token === process.env.NEXT_PUBLIC_ADMIN_PASSWORD ? <Reservation token={token}/> :
+                     <div>
+                      <input
+                       placeholder="put password to access to reservations"
+                        className="w-full px-4 py-2 text-base leading-[18px] font-normal border border-solid border-[var(--neutral-gray)] laceholder-orange-600 focus:outline-none rounded-xl bg-[#FCFBFF]"
+                      value={token}
+                      onChange={(e) => setToken(e.target.value)}
+                      />
+                      </div>}
+
+                  <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
+                    Controle your reservation as an admin from here enjoy .
+                  </p>
+                    </> :
+                     <>
+                    <h2 className="text-4xl font-bold text-[#1E2B3A]">
                     Reservation info
                   </h2>
+                  
+
                   <p className="text-[14px] leading-[20px] text-[#1a2b3b] font-normal my-4">
                     Please to complease your reservation information form here to get your place.
                   </p>
                   <Inscription handleReservation={handleReservation} handleBack={handleBack} />
-                  <div>
-                  {/* fom select */}
-                  </div>
+                     </> }
+
+                   </div> 
                 </motion.div>
               ) : (
                 <p>Step 3</p>
@@ -440,14 +474,14 @@ export default function DemoPage() {
               ></rect>
             </svg>
             <figure
-              className="absolute md:top-1/2 ml-[-380px] md:ml-[0px] md:-mt-[240px] left-1/2 grid transform scale-[0.5] sm:scale-[0.6] md:scale-[130%] w-[760px] h-[540px] bg-[#f5f7f9] text-[9px] origin-[50%_15%] md:origin-[50%_25%] rounded-[15px] overflow-hidden p-2 z-20"
+              className="absolute md:top-1/2 ml-[-380px] md:ml-[0px] md:-mt-[240px] left-1/2 grid transform scale-[0.5] sm:scale-[0.6] md:scale-[130%] w-[760px] h-[540px] bg-[#f5f7f9] text-[9px] origin-[50%_15%] md:origin-[50%_25%] rounded-[15px] overflow-hidden p-2"
               style={{
                 grid: "100%/repeat(1,calc(5px * 28)) 1fr",
                 boxShadow:
                   "0 192px 136px rgba(26,43,59,.23),0 70px 50px rgba(26,43,59,.16),0 34px 24px rgba(26,43,59,.13),0 17px 12px rgba(26,43,59,.1),0 7px 5px rgba(26,43,59,.07), 0 50px 100px -20px rgb(50 50 93 / 25%), 0 30px 60px -30px rgb(0 0 0 / 30%), inset 0 -2px 6px 0 rgb(10 37 64 / 35%)",
               }}
             >
-              <div className="z-20 absolute h-full w-full bg-transparent cursor-default"></div>
+              <div className=" absolute h-full w-full bg-transparent cursor-default"></div>
               <div
                 className="bg-white flex flex-col text-[#1a2b3b] p-[18px] rounded-lg relative"
                 style={{ boxShadow: "inset -1px 0 0 #fff" }}

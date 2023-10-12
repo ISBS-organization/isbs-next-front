@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
