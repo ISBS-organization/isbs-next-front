@@ -413,7 +413,7 @@ export default function DemoPage() {
                     Reservations information
                     </h2>
                     
-                    {token === process.env.NEXT_PUBLIC_ADMIN_PASSWORD ? <Reservation token={token}/> :
+                    {token === 'WvNlvCR8IjtJ7cXYuEhwJA' ? <Reservation token={token}/> :
                      <div>
                       <input
                        placeholder="put password to access to reservations"
