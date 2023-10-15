@@ -19,7 +19,7 @@ export default function ConfirmReservation(props: {children: JSX.Element, _id:st
   }
   async function confirmPayment() {
     try {
-      const response = await axios.post(`http://localhost:5000/generate/ticket/${_id}`, {}, {headers: {token}})
+      const response = await axios.post(`${serverURL}/generate/ticket/${_id}`, {}, {headers: {token}})
       const {data} = response.data
       console.log(data)
   } catch (error) {
