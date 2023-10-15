@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios'
-import { headers } from 'next/dist/client/components/headers'
 import { Fragment, useState } from 'react'
 
 const serverURL = process.env.NEXT_PUBLIC_BASED_SERVER_URL
@@ -9,7 +8,7 @@ const serverURL = process.env.NEXT_PUBLIC_BASED_SERVER_URL
 export default function ConfirmReservation(props: {children: JSX.Element, _id:string, token: string}) {
     const {children, _id, token} = props
   let [isOpen, setIsOpen] = useState(false)
-
+  let [isLoaded, setIsLoaded] = useState(false)
   function closeModal() {
     setIsOpen(false)
   }
@@ -18,13 +17,18 @@ export default function ConfirmReservation(props: {children: JSX.Element, _id:st
     setIsOpen(true)
   }
   async function confirmPayment() {
+    setIsLoaded(true)
     try {
       const response = await axios.post(`${serverURL}/generate/ticket/${_id}`, {}, {headers: {token}})
       const {data} = response.data
+      alert("success")
       console.log(data)
   } catch (error) {
       console.log(error)
+      alert("try again")
+
   } finally {
+    setIsLoaded(false)
     closeModal()
   }
   }
@@ -78,7 +82,7 @@ export default function ConfirmReservation(props: {children: JSX.Element, _id:st
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={confirmPayment}
                     >
-                      Confirm payment
+                      {isLoaded ? "Loading...":"Confirm payment"}
                     </button>
                   </div>
                 </Dialog.Panel>
